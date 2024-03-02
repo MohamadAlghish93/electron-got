@@ -1,0 +1,291 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Electron Application</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+      }
+      .container {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #fff;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      }
+      h2 {
+        color: #333;
+      }
+      label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+      input[type="text"],
+      input[type="password"],
+      textarea {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        box-sizing: border-box;
+      }
+      input[type="radio"] {
+        margin-right: 5px;
+      }
+      button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+      textarea {
+        height: 100px;
+        resize: vertical;
+      }
+
+      /* Responsive Styles */
+      @media only screen and (max-width: 600px) {
+        .container {
+          max-width: 90%;
+          margin: 20px auto;
+          padding: 10px;
+        }
+      }
+
+      /* Style for tabs */
+      .tab {
+        display: none;
+      }
+
+      .group-box {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        margin-top: 10px;
+      }
+
+      /* Icon Styles */
+      .icon {
+        margin-right: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <!--s-->
+    <div class="container">
+      <h2>Application Interface</h2>
+
+      <!-- Tab navigation -->
+      <div>
+        <button class="tablinks" onclick="openTab(event, 'processing')">
+          Data Processing
+        </button>
+        <button class="tablinks" onclick="openTab(event, 'config')">
+          Configuration
+        </button>
+      </div>
+
+      <!-- Configuration Section -->
+      <div id="config" class="tab" style="display: block">
+        <div class="group-box">
+          <h3><i class="fas fa-cog icon"></i>Configuration Section:</h3>
+
+          <label for="connectionString"
+            ><i class="icon fas fa-database"></i> Database Connection
+            String:</label
+          >
+
+          <input type="text" id="connectionString" />
+
+          <label for="username"
+            ><i class="icon fas fa-user"></i> Username:</label
+          >
+          <input type="text" id="username" />
+
+          <label for="password"
+            ><i class="icon fas fa-lock"></i> Password:</label
+          >
+          <input type="password" id="password" />
+        </div>
+      </div>
+
+      <!-- Data Processing Section -->
+      <div id="processing" class="tab">
+        <div class="group-box">
+          <div>
+            <h3><i class="fas fa-cog icon"></i>Configuration Section:</h3>
+            <label for="apiEndpoint"
+              ><i class="icon fas fa-link"></i> API Endpoint:</label
+            >
+            <input type="text" id="apiEndpoint" />
+
+            <label for="apiToken"
+              ><i class="icon fas fa-key"></i> API Authentication Token:</label
+            >
+            <input type="text" id="apiToken" />
+          </div>
+        </div>
+
+        <div class="group-box">
+          <h3>Data Processing Section:</h3>
+          <input type="radio" name="dataSource" id="csvFile" value="csv" />
+          <label for="csvFile">CSV File</label>
+
+          <input
+            type="radio"
+            name="dataSource"
+            id="database"
+            value="database"
+          />
+          <label for="database">Database</label>
+          <input type="file" id="csvFileInput" accept=".csv" />
+        </div>
+
+        <div class="group-box">
+          <h3>
+            <i class="fas fa-external-link-alt icon"></i>API Request Section:
+          </h3>
+
+          <button id="convertButton" onclick="convertData()">
+            Convert Data to JSON
+          </button>
+          <button id="sendRequestButton" onclick="sendRequest()">
+            Send Data to API
+          </button>
+        </div>
+
+        <div class="group-box">
+          <h3><i class="fas fa-list-alt icon"></i>Logging Section:</h3>
+          <textarea id="logOutput" readonly></textarea>
+        </div>
+
+        <div class="group-box">
+          <h3>
+            <i class="fas fa-file-alt icon"></i>Report Generation Section:
+          </h3>
+          <button id="generateReportButton" onclick="generateReport()">
+            Generate Report
+          </button>
+          <textarea id="reportOutput" readonly></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!--e-->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
+    <script>
+      // Function to open specific tab
+      function openTab(evt, tabName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tab");
+        for (i = 0; i < tabcontent.length; i++) {
+          tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+          tablinks[i].classList.remove("active");
+        }
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.classList.add("active");
+      }
+
+      // Default to open the first tab
+      document.getElementsByClassName("tablinks")[0].click();
+
+      function convertData() {
+        // Sample implementation: Convert data to JSON
+        // Replace this with your actual implementation
+        let dataSource = document.querySelector(
+          'input[name="dataSource"]:checked'
+        ).value;
+        let jsonData;
+
+        // Read CSV file
+        const fileInput = document.getElementById("csvFileInput");
+        const filePath = fileInput.files[0].path;
+        const fs = require("fs");
+        const csv = fs.readFileSync(filePath, "utf-8");
+
+        if (dataSource === "csv") {
+          // Read data from CSV and convert to JSON
+          jsonData = csv;
+        } else if (dataSource === "database") {
+          // Read data from database and convert to JSON
+          jsonData = "Sample JSON data from database";
+        }
+
+        // Display JSON data in the log output area
+        document.getElementById("logOutput").value = JSON.stringify(
+          jsonData,
+          null,
+          2
+        );
+      }
+
+      function sendRequest() {
+        // Sample implementation: Send data to API
+        // Replace this with your actual implementation
+        let apiEndpoint = document.getElementById("apiEndpoint").value;
+        let apiToken = document.getElementById("apiToken").value;
+        let jsonData = document.getElementById("logOutput").value;
+
+        // Example of sending data to API using fetch API
+        fetch(apiEndpoint, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + apiToken,
+          },
+          body: jsonData,
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log("Response from API:", data);
+            // Update log output with API response
+            document.getElementById("logOutput").value = JSON.stringify(
+              data,
+              null,
+              2
+            );
+          })
+          .catch((error) => {
+            console.error("Error sending request:", error);
+            // Update log output with error message
+            document.getElementById("logOutput").value =
+              "Error sending request: " + error;
+          });
+      }
+
+      function generateReport() {
+        // Sample implementation: Generate report
+        // Replace this with your actual implementation
+        // For example, you could extract data from log output and generate a report
+        let logData = document.getElementById("logOutput").value;
+        let reportData = "Sample report data based on log output:\n" + logData;
+
+        // Display report data in the report output area
+        document.getElementById("reportOutput").value = reportData;
+      }
+    </script>
+  </body>
+</html>

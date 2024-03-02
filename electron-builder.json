@@ -1,0 +1,16 @@
+{
+  "appId": "com.example.electron-app",
+  "productName": "Electron App",
+  "directories": {
+    "output": "dist"
+  },
+  "win": {
+    "target": "nsis"
+  },
+  "mac": {
+    "target": "dmg"
+  },
+  "linux": {
+    "target": "AppImage"
+  }
+}
